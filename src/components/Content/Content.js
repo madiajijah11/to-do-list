@@ -29,11 +29,12 @@ const Content = () => {
 					Tambah
 				</button>
 			</div>
-			<Row xs={1} md={4} className="g-4">
-				{todos.data ? (
-					todos.data.map((todo) => (
+
+			{todos.data ? (
+				todos.data.map((todo) => (
+					<Row xs={1} md={4} className="g-4">
 						<Col key={`todos_${todo.id}`}>
-							<Card>
+							<Card className="shadow-sm">
 								<Card.Body>
 									<Card.Title>{todo.title}</Card.Title>
 									<Card.Text>
@@ -42,14 +43,20 @@ const Content = () => {
 								</Card.Body>
 							</Card>
 						</Col>
-					))
-				) : (
-					<div>
-						<button>+</button>
+					</Row>
+				))
+			) : (
+				<Card className="shadow-sm">
+					<Card.Body>
+						<button className="btn btn-info">
+							<i className="bi-plus" />
+						</button>
+					</Card.Body>
+					<Card.Footer>
 						<p>Buat activity pertamamu</p>
-					</div>
-				)}
-			</Row>
+					</Card.Footer>
+				</Card>
+			)}
 		</div>
 	);
 };
