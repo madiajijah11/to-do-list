@@ -1,21 +1,21 @@
 .header-content {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	padding: 50px 0 50px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 50px 0 50px 0;
 }
 
 .btnTambah {
-	background-color: #16abf8;
-	color: #fff;
-	border: none;
-	padding: 10px 20px 10px 20px;
-	border-radius: 25px;
-	-webkit-border-radius: 25px;
-	-moz-border-radius: 25px;
-	-ms-border-radius: 25px;
-	-o-border-radius: 25px;
-	cursor: pointer;
-	font-size: 24px;
-	font-weight: 600;
+  background-color: #16abf8;
+  color: #fff;
+  border: none;
+  padding: 10px 20px 10px 20px;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 600;
 }

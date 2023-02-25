@@ -1,12 +1,12 @@
 .header {
-	height: 105px;
-	background-color: #16abf8;
-	color: #fff;
-	display: flex;
-	align-items: center;
+  height: 105px;
+  background-color: #16abf8;
+  color: #fff;
+  display: flex;
+  align-items: center;
 }
 
 .dashboard-title {
-	font-size: 24px;
-	font-weight: 700;
+  font-size: 24px;
+  font-weight: 700;
 }
