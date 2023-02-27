@@ -1,52 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import './TodoLists.css'
-import { format } from 'date-fns'
 import { Image, Card, Col, Row, Button } from 'react-bootstrap'
 import EmptyItem from '../../assets/background/empty-item.png'
 import { BsTrash, BsPencil, BsArrowLeft } from 'react-icons/bs'
 import { useParams, Link } from 'react-router-dom'
 import AddListItem from '../AddListItem'
+import http from '../../helpers/http'
+import DeleteActivityOrList from '../DeleteActivityOrList'
 
 const TodoLists = () => {
   const { id } = useParams()
   const [todos, setTodos] = useState([])
   const [show, setShow] = useState(false)
+  const [showDelete, setShowDelete] = useState(false)
+  const [selectedTodo, setSelectedTodo] = useState({})
 
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
+  const handleCloseDelete = () => setShowDelete(false)
+  const handleShowDelete = () => setShowDelete(true)
 
-  const tambahActivity = async () => {
-    const response = await fetch(
-      'https://todo.api.devcode.gethired.id/activity-groups?email=madiajijah7@gmail.com',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          title: 'New Activity',
-          email: 'madiajijah7@gmail.com'
-        })
-      }
-    )
-    const data = await response.json()
+  const fetchTodos = async () => {
+    const { data } = await http().get(`/todo-items?activity_group_id=${id}`)
     setTodos(data.data)
   }
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      const response = await fetch(
-        `https://todo.api.devcode.gethired.id/todo-items?activity_group_id=${id}`
-      )
-      const data = await response.json()
-      setTodos(data.data)
-    }
     fetchTodos()
-  }, [setTodos, id])
+  }, [id, show, showDelete])
 
   return (
     <div className='container'>
-      <AddListItem show={show} handleClose={handleClose} />
+      <DeleteActivityOrList
+        show={showDelete}
+        handleClose={handleCloseDelete}
+        id={selectedTodo.id}
+        title={selectedTodo.title}
+      />
+      <AddListItem show={show} handleClose={handleClose} id={id} />
       <div className='header-content'>
         <div
           style={{
@@ -75,23 +66,20 @@ const TodoLists = () => {
           Tambah
         </button>
       </div>
-      {todos ? (
+      {todos.length === 0 ? (
         <div data-cy='todo-empty-state' className='text-center'>
           <Image
             src={EmptyItem}
             alt='empty-todo'
-            onClick={() => tambahActivity()}
+            onClick={() => handleShow()}
           />
         </div>
       ) : (
-        <Row xs={1} md={4} className='g-4 pb-5'>
-          {todos?.map((todo, index) => (
+        <Row xs={1} md={1} className='g-4 pb-5'>
+          {todos.map((todo, index) => (
             <Col key={`todos_${todo.id}`}>
               <Card data-cy={`todo-item-${index}`} className='shadow-sm'>
                 <Card.Body>
-                  <Card.Title data-cy='todo-item-title'>
-                    {todo.title}
-                  </Card.Title>
                   <div
                     style={{
                       display: 'flex',
@@ -99,10 +87,16 @@ const TodoLists = () => {
                       alignItems: 'center'
                     }}
                   >
-                    <div data-cy='todo-item-date'>
-                      {format(new Date(todo.created_at), 'dd MMMM yyyy')}
-                    </div>
-                    <Button data-cy='todo-item-delete-button'>
+                    <Card.Title data-cy='todo-item-title'>
+                      {todo.priority} - {todo.title}
+                    </Card.Title>
+                    <Button
+                      data-cy='todo-item-delete-button'
+                      onClick={() => {
+                        setSelectedTodo(todo)
+                        handleShowDelete()
+                      }}
+                    >
                       <BsTrash />
                     </Button>
                   </div>

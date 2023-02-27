@@ -1,23 +1,21 @@
 import React, { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
+import http from '../helpers/http'
 
-function AddListItem ({ show, handleClose }) {
+function AddListItem ({ show, handleClose, id }) {
   const [item, setItem] = useState({
     name: '',
     priority: ''
   })
+
   const handleSave = async () => {
-    console.log(item)
-    await fetch('https://todo.api.devcode.gethired.id/todo-items', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        title: item.name,
-        priority: item.priority
-      })
+    const response = await http().post('/todo-items', {
+      activity_group_id: parseInt(id),
+      title: item.name
     })
+    if (response.status === 201) {
+      handleClose()
+    }
   }
 
   return (
@@ -75,7 +73,7 @@ function AddListItem ({ show, handleClose }) {
           data-cy='modal-add-save-button'
           variant='primary'
           onClick={handleSave}
-          disabled={item.name === '' || item.priority === ''}
+          disabled={item.name === ''}
         >
           Save Changes
         </Button>
